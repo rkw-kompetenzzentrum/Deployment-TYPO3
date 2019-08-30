@@ -1,5 +1,5 @@
 {
-    "name": "rkw/depolyment-typo3",
+    "name": "rkw/deployment-typo3",
     "description": "Deployments of RKW",
     "license": "GPL-3.0+",
     "autoload": {
