@@ -1,13 +1,14 @@
 <?php
 /**
- * Class RsyncFlags
+ * RsyncFlags
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
+ * @package RKW_Deployment
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @version 1.0.2
  */
-$rsyncFlags = array(
+
+return [
 
     '-az',
     '--no-perms',
@@ -55,4 +56,4 @@ $rsyncFlags = array(
     '--exclude /web/typo3conf/deprecation_*',
     '--exclude /web/typo3temp/*',
     '--exclude /web/uploads/'
-);
+];
