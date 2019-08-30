@@ -1,0 +1,20 @@
+# Version 1.0.0
+# =======================================================
+# Ignore Editor-files and other basic stuff
+# =======================================================
+.DS_Store
+node_modules
+bower_components
+
+.vagrant
+*.box
+*.log
+*.dpkg
+*.dpkg-new
+
+/.build
+/.buildpath
+/.idea
+/.settings
+/.project
+
