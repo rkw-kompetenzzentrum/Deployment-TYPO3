@@ -1,5 +1,5 @@
 <?php
-namespace RKW\Deployment\TYPO3;
+namespace RKW\SurfDeployment;
 
 /*
  * This file is part of the TYPO3 CMS project.

@@ -1,9 +1,9 @@
 <?php
-namespace RKW\Deployment\TYPO3\Domain\Model;
+namespace RKW\SurfDeployment\Domain\Model;
 
 
 /**
- * NodeFactory
+ * Class Node
  *
  * @author Steffen Kroggel <developer@steffenkroggel.de>
  * @copyright Rkw Kompetenzzentrum
