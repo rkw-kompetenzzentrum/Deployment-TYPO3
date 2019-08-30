@@ -24,6 +24,14 @@ class Deployment
      */
     public function __construct(\TYPO3\Surf\Domain\Model\Deployment $deployment, $options)
     {
+        $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Continue with deployment of branch [' . $options['branch'] . '] on server [' . $options['hostname'] . "]?\n(y|n) ", false, '/^(y|j)/i');
+        $helper = new \Symfony\Component\Console\Helper\QuestionHelper;
+        $input = new \Symfony\Component\Console\Input\ArgvInput;
+        $output = new \Symfony\Component\Console\Output\StreamOutput(fopen('php://stdout', 'w'));
+
+        if (!$helper->ask($input, $output, $question)) {
+            exit;
+        }
 
         $application = new Application();
         $application->initApplication($options);
