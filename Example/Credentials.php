@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @version 1.0.3
  */
-$options = [
+return [
     'projectName' => 'RKW',
     'deploymentPath' => '/var/www/rkw.codes/surf',
     'workspacesBasePath' => '/tmp/surf',

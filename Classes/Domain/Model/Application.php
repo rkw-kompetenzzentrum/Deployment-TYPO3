@@ -267,7 +267,7 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\EmailNotification',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ -f "./web/changelog" ]; then mail -s "A new release is online now! (branch \"' . $this->getOption('branch') . '\") ' . $this->getOption('adminMail') . ' < ./web/changelog; fi']
+            ['command' => 'cd {releasePath} && if [ -f "./web/changelog" ]; then mail -s "A new release is online now! (branch \"' . $this->getOption('branch') . '\")" ' . $this->getOption('adminMail') . ' < ./web/changelog; fi']
         );
         
         // Extension Specific Tasks
