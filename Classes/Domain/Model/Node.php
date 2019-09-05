@@ -50,7 +50,7 @@ class Node extends \TYPO3\Surf\Domain\Model\Node
 
             // override name
             if ($key == 'hostname') {
-                $this->setName($mergedOptions[$key]);
+                $this->name = $mergedOptions[$key];
             }
         }
     }
