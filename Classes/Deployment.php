@@ -14,6 +14,15 @@ use RKW\SurfDeployment\Domain\Model\Node;
  */
 class Deployment
 {
+    /**
+     * 
+     * Basic application specific options
+     * @var array
+     */
+    protected $options = array(
+        'workspacesBasePath' => '/tmp/surf'
+    );
+    
 
     /**
      * Deployment constructor
@@ -24,6 +33,20 @@ class Deployment
      */
     public function __construct(\TYPO3\Surf\Domain\Model\Deployment $deployment, $options)
     {
+        
+        // set options based on allowed options
+        $mergedOptions = array_merge($this->options, $options);
+        foreach (array_keys($this->options) as $key) {
+
+            if (
+                (! isset($mergedOptions[$key]))
+                && (! is_null($mergedOptions[$key]))
+            ){
+                throw new \RKW\SurfDeployment\Exception(sprintf('Param "%s" has not been set.', $key));
+            }
+        }
+        
+        // security question
         $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Continue with deployment of branch [' . $options['branch'] . '] on server [' . $options['hostname'] . "]?\n(y|n) ", false, '/^(y|j)/i');
         $helper = new \Symfony\Component\Console\Helper\QuestionHelper;
         $input = new \Symfony\Component\Console\Input\ArgvInput;
@@ -40,8 +63,8 @@ class Deployment
         $node->initNode($options);
         $application->addNode($node);
 
-        if ($options['workspacesBasePath']) {
-            $deployment->setWorkspacesBasePath($options['workspacesBasePath']);
+        if ($this->options['workspacesBasePath']) {
+            $deployment->setWorkspacesBasePath($this->options['workspacesBasePath']);
         }
 
         $deployment->addApplication($application);

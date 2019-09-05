@@ -10,7 +10,6 @@
 return [
     'projectName' => 'RKW',
     'deploymentPath' => '/var/www/rkw.codes/surf',
-    'workspacesBasePath' => '/tmp/surf',
     'phpBinaryPathAndFilename' => '/usr/bin/php5.6',
     'adminMail' => 'deployment@rkw.de',
 
@@ -20,6 +19,5 @@ return [
     'port' => '',
 
     'repositoryUrl' => 'https://github.com/RKWKomZe/Example.git',
-    'branch' => 'staging',
-    'fileExtension' => 'stage'
+    'branch' => 'staging'
 ];

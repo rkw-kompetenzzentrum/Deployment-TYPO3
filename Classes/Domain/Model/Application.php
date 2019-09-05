@@ -40,7 +40,6 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
             'context' => 'Production',
             'scriptFileName' => 'vendor/bin/typo3cms',
             'webDirectory' => 'web',
-            'fileExtension' => '',
             'adminMail' => 'deployment@rkw.de',
         ));
     }
@@ -89,6 +88,17 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
         if ($this->getOption('transferMethod') == 'rsync') {
             $rsyncFlags = require_once (__DIR__ . '/../../../Includes/RsyncFlags.php');
             $this->setOption('rsyncFlags', implode(' ', $rsyncFlags));
+        }
+        
+        // set file extension based on branch
+        if ($branch = $this->getOption('branch')) {
+
+            $this->setOption('fileExtension', 'dev');
+            if ($branch == 'staging') {
+                $this->setOption('fileExtension', 'stage');
+            } else if ($branch == 'production') {
+                $this->setOption('fileExtension', 'prod');
+            }            
         }
 
         // set symlinks
