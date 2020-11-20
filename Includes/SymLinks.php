@@ -13,5 +13,6 @@ return [
     './web/fileadmin' => '../../../surf/shared/Data/fileadmin',
     './web/typo3temp/logs' => '../../../../shared/Data/logs',
     './web/typo3temp/var/logs' => '../../../../../shared/Data/logs',
+    './web/typo3temp/assets' => '../../../../shared/Data/assets',
     './web/typo3conf/LocalConfiguration.php' => '../../../../shared/LocalConfiguration.php'
 ];

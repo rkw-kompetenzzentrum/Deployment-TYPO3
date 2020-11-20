@@ -1,7 +1,20 @@
 {
     "name": "rkw/deployment-typo3",
     "description": "Deployments of RKW",
-    "license": "GPL-3.0+",
+    "homepage": "https://www.rkw-kompetenzzentrum.de",
+    "license": ["GPL-3.0+"],
+    "keywords": ["TYPO3 CMS", "RKW", "Deployment"],
+    "support": {
+        "email": "developer@steffenkroggel.de"
+    },
+    "authors": [
+        {
+            "name": "Steffen Kroggel",
+            "email": "developer@steffenkroggel.de",
+            "homepage": "http://www.steffenkroggel.de",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=5.6",
         "typo3/cms": ">=7.6",
