@@ -16,9 +16,8 @@
         }
     ],
     "require": {
-        "php": "~5.6.0",
-        "typo3/cms": "~7.6.0",
-        "helhum/typo3-console": "^4.9",
+        "php": "~7.4.0",
+        "typo3/cms": "~9.5.0",
         "typo3/surf": "^2.0.0"
     },
     "autoload": {
