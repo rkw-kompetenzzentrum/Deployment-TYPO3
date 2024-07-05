@@ -47,7 +47,7 @@ class Deployment
         }
         
         // security question
-        $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Continue with deployment of branch [' . $options['branch'] . '] on server [' . $options['hostname'] . "]?\n(y|n) ", false, '/^(y|j)/i');
+        $question = new \Symfony\Component\Console\Question\ConfirmationQuestion('Continue with deployment of branch [' . $options['branch'] . '] to [' . $options['deploymentPath'] . '] on server [' . $options['hostname'] . "]?\n(y|n) ", false, '/^(y|j)/i');
         $helper = new \Symfony\Component\Console\Helper\QuestionHelper;
         $input = new \Symfony\Component\Console\Input\ArgvInput;
         $output = new \Symfony\Component\Console\Output\StreamOutput(fopen('php://stdout', 'w'));
@@ -63,10 +63,7 @@ class Deployment
         $node->initNode($options);
         $application->addNode($node);
 
-        if ($this->options['workspacesBasePath']) {
-            $deployment->setWorkspacesBasePath($this->options['workspacesBasePath']);
-        }
-
+        $deployment->setWorkspacesBasePath($this->options['workspacesBasePath']);
         $deployment->addApplication($application);
     }
 }
