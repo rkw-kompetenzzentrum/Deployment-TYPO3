@@ -39,13 +39,13 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
             'deploymentPath' => '',
             'context' => 'Production',
             'scriptFileName' => 'vendor/bin/typo3cms',
-            'webDirectory' => 'web',
+            'webDirectory' => 'public',
             'adminMail' => 'deployment@rkw.de',
         ));
     }
 
-    
-    
+
+
     /**
      * Init application
      *
@@ -89,7 +89,7 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
             $rsyncFlags = require_once (__DIR__ . '/../../../Includes/RsyncFlags.php');
             $this->setOption('rsyncFlags', implode(' ', $rsyncFlags));
         }
-        
+
         // set file extension based on branch
         if ($branch = $this->getOption('branch')) {
 
@@ -98,7 +98,7 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
                 $this->setOption('fileExtension', 'stage');
             } else if ($branch == 'production') {
                 $this->setOption('fileExtension', 'prod');
-            }            
+            }
         }
 
         // set symlinks
@@ -135,10 +135,10 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
 
         $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'RKW\\Surf\\Task\\Local\\CopyEnv');
         $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'RKW\\Surf\\Task\\Local\\CopyHtaccess');
-        $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'RKW\\Surf\\Task\\Local\\CopyAdditionalConfiguration');
+        // $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'RKW\\Surf\\Task\\Local\\CopyAdditionalConfiguration');
         $workflow->afterTask('TYPO3\\Surf\\Task\\Package\\GitTask', 'RKW\\Surf\\Task\\Local\\FixRights');
 
-        $workflow->afterTask('RKW\\Surf\\Task\\Local\\FixRights', 'RKW\\Surf\\Task\\Local\\SetGitFileModeIgnore');
+        // $workflow->afterTask('RKW\\Surf\\Task\\Local\\FixRights', 'RKW\\Surf\\Task\\Local\\SetGitFileModeIgnore');
 
         // -----------------------------------------------
         // Step 3: transfer - Here all tasks are located which serve to transfer the assets from your local computer to the node, where the application runs.
@@ -201,25 +201,25 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
             \TYPO3\Surf\Task\LocalShellTask::class,
             ['command' => 'cd {workspacePath} && chmod -R 770 ./ && echo "Fixed rights in {workspacePath}"']
         );
-        $workflow->defineTask(
+        /*$workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\SetGitFileModeIgnore',
             \TYPO3\Surf\Task\LocalShellTask::class,
             ['command' => 'cd {workspacePath} && ./scripts/git-filemode-recursive.sh && echo "Set \'git config core.filemode false\' on all repositories in {workspacePath}"']
-        );
+        );*/
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\CopyEnv',
             \TYPO3\Surf\Task\LocalShellTask::class,
             ['command' => 'cd {workspacePath} && if [ -f "_.env.' . $this->getOption('fileExtension') . '" ]; then cp _.env.' . $this->getOption('fileExtension') . ' .env; fi']
         );
-        $workflow->defineTask(
+        /*$workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\CopyAdditionalConfiguration',
             \TYPO3\Surf\Task\LocalShellTask::class,
-            ['command' => 'cd {workspacePath} && if [ -f "./web/typo3conf/AdditionalConfiguration.' . $this->getOption('fileExtension') . '.php" ]; then cp ./web/typo3conf/AdditionalConfiguration.' . $this->getOption('fileExtension') . '.php ./web/typo3conf/AdditionalConfiguration.php; fi && echo "Copied AdditionalConfiguration.php in {workspacePath}."']
-        );
+            ['command' => 'cd {workspacePath} && if [ -f "./public/typo3conf/AdditionalConfiguration.' . $this->getOption('fileExtension') . '.php" ]; then cp ./public/typo3conf/AdditionalConfiguration.' . $this->getOption('fileExtension') . '.php ./public/typo3conf/AdditionalConfiguration.php; fi && echo "Copied AdditionalConfiguration.php in {workspacePath}."']
+        );*/
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\CopyHtaccess',
             \TYPO3\Surf\Task\LocalShellTask::class,
-            ['command' => 'cd {workspacePath} && if [ -f "./web/_.htaccess.' . $this->getOption('fileExtension') . '" ]; then cp ./web/_.htaccess.' . $this->getOption('fileExtension') . ' ./web/.htaccess; fi && if [ -f "./web/_.htpasswd.' . $this->getOption('fileExtension') . '" ]; then cp ./web/_.htpasswd.' . $this->getOption('fileExtension') . ' ./web/.htpasswd; fi && echo "Copied .htaccess in {workspacePath}."']
+            ['command' => 'cd {workspacePath} && if [ -f "./public/_.htaccess.' . $this->getOption('fileExtension') . '" ]; then cp ./public/_.htaccess.' . $this->getOption('fileExtension') . ' ./public/.htaccess; fi && if [ -f "./public/_.htpasswd.' . $this->getOption('fileExtension') . '" ]; then cp ./public/_.htpasswd.' . $this->getOption('fileExtension') . ' ./public/.htpasswd; fi && echo "Copied .htaccess in {workspacePath}."']
         );
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\RemoveComposerLock',
@@ -233,31 +233,31 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
             \TYPO3\Surf\Task\LocalShellTask::class,
             ['command' => 'cd {workspacePath} && export TYPO3_DEPLOYMENT_RUN="1" && composer install --no-ansi --no-interaction --no-dev --no-progress --classmap-authoritative --prefer-dist 2>&1 && export TYPO3_DEPLOYMENT_RUN="0"']
         );
-        
+
         // without --no-dev here. This way we can deploy development stuff to the staging environment without having to take care for production environment.
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Local\\ComposerInstallStaging',
             \TYPO3\Surf\Task\LocalShellTask::class,
             ['command' => 'cd {workspacePath} && export TYPO3_DEPLOYMENT_RUN="1" && composer install --no-ansi --no-interaction --no-progress --classmap-authoritative --prefer-dist 2>&1 && export TYPO3_DEPLOYMENT_RUN="0"']
         );
-        
+
         //---------------------------------------
         // define task executed remotely
         //---------------------------------------
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\CopyDummyFiles',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ -d "./dummy" ] && [ -d "./web/fileadmin/" ]; then if [ ! -d "./web/fileadmin/media" ]; then mkdir ./web/fileadmin/media; fi && cp ./dummy/* ./web/fileadmin/media/ && echo "Copied dummy files in {releasePath}."; fi']
+            ['command' => 'cd {releasePath} && if [ -d "./dummy" ] && [ -d "./public/fileadmin/" ]; then if [ ! -d "./public/fileadmin/media" ]; then mkdir ./public/fileadmin/media; fi && cp ./dummy/* ./public/fileadmin/media/ && echo "Copied dummy files in {releasePath}."; fi']
         );
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\CreateTypo3Temp',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ ! -d "./web/typo3temp/" ]; then mkdir ./web/typo3temp; fi && if [ ! -d "./web/typo3temp/var" ]; then mkdir ./web/typo3temp/var; fi']
+            ['command' => 'cd {releasePath} && if [ ! -d "./public/typo3temp/" ]; then mkdir ./public/typo3temp; fi && if [ ! -d "./public/typo3temp/var" ]; then mkdir ./public/typo3temp/var; fi']
         );
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\FixRights',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && find ./web -type f -exec chmod 640 {} \; && find ./web -type d -exec chmod 750 {} \; && echo "Fixed rights in {releasePath}"']
+            ['command' => 'cd {releasePath} && find ./ -type f -exec chmod 644 {} \; && find ./ -type d -exec chmod 755 {} \; && echo "Fixed rights in {releasePath}"']
         );
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\ClearOpcCache',
@@ -272,19 +272,19 @@ class Application extends \TYPO3\Surf\Application\TYPO3\CMS
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\TYPO3\\UpdateSchema',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ -f "./web/typo3conf/LocalConfiguration.php" ]; then ./vendor/bin/typo3cms database:updateschema "*.add,*.change"; fi']
+            ['command' => 'cd {releasePath} && if [ -f "./public/typo3conf/LocalConfiguration.php" ]; then ./vendor/bin/typo3cms database:updateschema "*.add,*.change"; fi']
         );
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\EmailNotification',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ -f "./web/changelog" ]; then mail -s "A new release is online now! (branch \"' . $this->getOption('branch') . '\")" ' . $this->getOption('adminMail') . ' < ./web/changelog; fi']
+            ['command' => 'cd {releasePath} && if [ -f "./public/changelog" ]; then mail -s "A new release is online now! (branch \"' . $this->getOption('branch') . '\")" ' . $this->getOption('adminMail') . ' < ./public/changelog; fi']
         );
-        
+
         // Extension Specific Tasks
         $workflow->defineTask(
             'RKW\\Surf\\Task\\Remote\\RkwSearch\\FixRights',
             \TYPO3\Surf\Task\ShellTask::class,
-            ['command' => 'cd {releasePath} && if [ -f "./web/typo3conf/ext/rkw_search" ]; then chmod 755 ./web/typo3conf/ext/rkw_search/Classes/Libs/TreeTagger/bin/* && chmod 755 ./web/typo3conf/ext/rkw_search/Classes/Libs/TreeTagger/cmd/* && echo "Fixed rights for rkw_search"; fi']
+            ['command' => 'cd {releasePath} && if [ -f "./public/typo3conf/ext/rkw_search" ]; then chmod 755 ./public/typo3conf/ext/rkw_search/Classes/Libs/TreeTagger/bin/* && chmod 755 ./public/typo3conf/ext/rkw_search/Classes/Libs/TreeTagger/cmd/* && echo "Fixed rights for rkw_search"; fi']
         );
 
 
