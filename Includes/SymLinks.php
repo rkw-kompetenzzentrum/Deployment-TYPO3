@@ -9,10 +9,10 @@
  */
 
 return [
-    './web/uploads' => '../../../surf/shared/Data/uploads',
-    './web/fileadmin' => '../../../surf/shared/Data/fileadmin',
-    './web/typo3temp/logs' => '../../../../shared/Data/logs',
-    './web/typo3temp/var/logs' => '../../../../../shared/Data/logs',
-    './web/typo3temp/assets' => '../../../../shared/Data/assets',
-    './web/typo3conf/LocalConfiguration.php' => '../../../../shared/LocalConfiguration.php'
+    './public/uploads' => '../../../surf/shared/Data/uploads',
+    './public/fileadmin' => '../../../surf/shared/Data/fileadmin',
+    './public/typo3temp/logs' => '../../../../shared/Data/logs',
+    './public/typo3temp/var/logs' => '../../../../../shared/Data/logs',
+    './public/typo3temp/assets' => '../../../../shared/Data/assets',
+    './public/typo3conf/LocalConfiguration.php' => '../../../../shared/LocalConfiguration.php'
 ];

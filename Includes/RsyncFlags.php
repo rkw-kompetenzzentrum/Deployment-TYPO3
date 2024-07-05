@@ -27,6 +27,11 @@ return [
     '--exclude /.settings',
     '--exclude /.project',
 
+    '--exclude /.surf',
+    '--exclude /.dev',
+    '--exclude /.ddev',
+    '--exclude /.scripts',
+
     '--exclude .DS_Store',
     '--exclude Capfile',
     '--exclude gulpfile.js',
@@ -45,15 +50,13 @@ return [
     "--exclude '*.prod*'",
     "--exclude '*.stage*'",
 
-    '--exclude /dev',
-    '--exclude /scripts',
-    '--exclude /web/data*.txt',
-    '--exclude /web/fileadmin',
-    '--exclude /web/typo3conf/ENABLE_INSTALL_TOOL',
-    '--exclude /web/typo3conf/LocalConfiguration.php',
-    '--exclude /web/typo3conf/temp_CACHED*',
-    '--exclude /web/typo3conf/temp_fieldInfo.php',
-    '--exclude /web/typo3conf/deprecation_*',
-    '--exclude /web/typo3temp/*',
-    '--exclude /web/uploads/'
+    '--exclude /public/data*.txt',
+    '--exclude /public/fileadmin',
+    '--exclude /public/typo3conf/ENABLE_INSTALL_TOOL',
+    '--exclude /public/typo3conf/LocalConfiguration.php',
+    '--exclude /public/typo3conf/temp_CACHED*',
+    '--exclude /public/typo3conf/temp_fieldInfo.php',
+    '--exclude /public/typo3conf/deprecation_*.log',
+    '--exclude /public/typo3temp/*',
+    '--exclude /public/uploads/'
 ];
